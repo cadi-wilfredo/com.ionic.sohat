@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ 'settings'|translate }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-list-header style="background: transparent;color:#009587;border:0;font-size: 1.8rem;">
+      <b>{{'general' | translate}}</b>
+    </ion-list-header>
+    <ion-item style="background: transparent;">
+      <ion-label color="dark">{{'language'|translate}}</ion-label>
+      <ion-select [(ngModel)]="lang" (ionChange)="langChange($event)">
+        <ion-option *ngFor="let item of langs" [value]="item.value">
+          {{ item.value | translate }}
+        </ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-list-header style="background: transparent;color:#009587;font-size: 1.8rem;">
+      <b>{{'apparence' | translate}}</b>
+    </ion-list-header>
+    <ion-item style="background: transparent;">
+      <ion-range min="3" max="8" pin="true" [(ngModel)]="fontSize" (ionChange)="fontSizeChange($event)" color="secondary" step="1"
+        snaps="true">
+        <ion-label range-left class="popover-text-button popover-text-smaller">A</ion-label>
+        <ion-label range-right class="popover-text-button popover-text-larger">A</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-item style="background: transparent;">
+      <!-- <ion-label color="dark">{{'theme'|translate}}</ion-label> -->
+      <ion-row class="popover-row-dots">
+        <ion-col>
+          <button tappable (click)="changeTheme('white')" ion-button="popover-dot" class="popover-dot-white" [class.selected]="theme === 'white'"></button>
+        </ion-col>
+        <ion-col>
+          <button tappable (click)="changeTheme('tan')" ion-button="popover-dot" class="popover-dot-tan" [class.selected]="theme === 'tan'"></button>
+        </ion-col>
+        <ion-col>
+          <button tappable (click)="changeTheme('grey')" ion-button="popover-dot" class="popover-dot-grey" [class.selected]="theme === 'grey'"></button>
+        </ion-col>
+        <ion-col>
+          <button tappable (click)="changeTheme('black')" ion-button="popover-dot" class="popover-dot-black" [class.selected]="theme === 'black'"></button>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>
+
+  <ion-card>
+    <ion-card-content [style.background]="backgroundColor">
+      <p [style.text-align]="'center'" [style.font-size]="fontSize+'vw'" [style.color]="color" [innerHTML]="'sample'|translate"></p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

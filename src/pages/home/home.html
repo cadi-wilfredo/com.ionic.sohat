@@ -1,18 +1,26 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>{{'home'|translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
-
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
-
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+<ion-content>
+  <ion-list no-lines>
+      <ion-list-header style="background: transparent;color:#009587;font-size: 1.8rem;border:0;">
+        <b>{{'ten_last'|translate}}</b>
+      </ion-list-header>
+      <ion-item *ngFor="let item of hymnsSpanishOne" style="background: transparent;" tappable (click)="itemTapped($event, item)">
+        {{item.id}} - {{item.title}}
+        <p><ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
+        <p><ion-icon name="calendar"></ion-icon> {{item.openAt |date:'short'}}</p>
+        <ion-icon item-end [name]="item.favorite ? 'heart' : 'heart-outline'" [color]="item.favorite? 'danger' : 'primary'"></ion-icon>
+      </ion-item>
+      <ion-row align-items-center *ngIf="!hymnsSpanishOne.length">
+        <ion-col text-center col-12><ion-icon name="filing" color="secondary" style="font-size: 6rem;"></ion-icon></ion-col>
+      </ion-row>
+      <ion-item text-center style="color: #717171; background: transparent;" *ngIf="!hymnsSpanishOne.length">{{'no_open'|translate}}</ion-item>
+  </ion-list>
 </ion-content>

@@ -1,0 +1,43 @@
+<div style="height:100vh;width:100vw;background: white;" *ngIf="firstStart===null">
+  <ion-grid>
+    <ion-row>
+      <ion-col></ion-col>
+      <ion-col>
+        <img src="assets/imgs/index.png" style="height:40vh;margin-top:35vh;" />
+      </ion-col>
+      <ion-col></ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
+<ion-content *ngIf="firstStart">
+  <ion-slides pager (ionSlideDidChange)="slideChanged()">
+    <ion-slide class="slide-1">
+      <div class="diag">
+        <img class="logo" src="assets/imgs/phone_list_music_shadows.svg">
+      </div>
+      <div>
+        <h2>All your hymns here</h2>
+        <p>We show you all hymns' collection</p>
+      </div>
+    </ion-slide>
+    <ion-slide class="slide-2">
+      <div class="diag">
+        <ion-icon name="cloud-download" color="primary"></ion-icon>
+      </div>
+      <div>
+        <h2>Listen & Downlod</h2>
+        <p>You can listen online or offline by download. </p>
+      </div>
+    </ion-slide>
+    <ion-slide class="slide-3">
+      <div class="diag">
+        <ion-icon ios="ios-chatboxes" md="md-chatboxes" color="primary"></ion-icon>
+      </div>
+      <div>
+        <h2>Multilanguage Support</h2>
+        <p>We provide English and Spanish translations for all the content. </p>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <button (click)="skip()" id="skip-btn">{{skipBtn|translate}}</button>
+</ion-content>

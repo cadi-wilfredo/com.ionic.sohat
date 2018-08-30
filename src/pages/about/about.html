@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{'about'|translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-grid>
+    <ion-list>
+      <ion-list-header style="background: transparent;color:#009587;font-size: 1.8rem;border:0;">
+        <b>{{'contact_info'|translate}}</b>
+      </ion-list-header>
+      <ion-item style="background: transparent;" text-wrap>
+        <ion-thumbnail item-start>
+          <img src="assets/imgs/about/avatar.JPG">
+        </ion-thumbnail>
+        <h2>Ing. Wilfredo Lorenzo Hernández</h2>
+        <p>Senior Developer</p>
+      </ion-item>
+      <a href="tel:+5353523420" ion-item style="background: transparent;">
+        <ion-icon name="call" item-start></ion-icon>
+        (+53)53523420
+      </a>
+      <a ion-item style="background: transparent;" tappable (click)="contactMe()">
+        <ion-icon name="mail" item-start></ion-icon>
+        wil890625.cu@gmail.com
+      </a>
+      <a href="https://www.facebook.com/wilard89" ion-item style="background: transparent;">
+        <ion-icon name="logo-facebook" item-start></ion-icon>
+        facebook.com/wilard89
+      </a>
+      <a href="https://www.linkedin.com/in/wilfredo-lorenzo-hernandez" ion-item style="background: transparent;">
+        <ion-icon name="logo-linkedin" item-start></ion-icon>
+        linkedin.com/in/wilfredo-lorenzo-hernandez
+      </a>
+      <ion-list-header style="background: transparent;color:#009587;font-size: 1.8rem;">
+        <b>{{'feedback'|translate}}</b>
+      </ion-list-header>
+      <form #feedbackForm="ngForm" (ngSubmit)="sendFeedback()">
+        <ion-item style="background: transparent;">
+          <ion-label color="dark">{{'feedback_type'|translate}}</ion-label>
+          <ion-select name="type" [(ngModel)]="feedback_type" required>
+            <ion-option selected>{{'feedback_type_rb'|translate}}</ion-option>
+            <ion-option>{{'feedback_type_s'|translate}}</ion-option>
+            <ion-option>{{'feedback_type_o'|translate}}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item style="background: transparent;">
+          <ion-textarea name="content" [(ngModel)]="feedback_content" placeholder="{{'feedback_content_ph'|translate}}" rows="5" required></ion-textarea>
+        </ion-item>
+        <ion-item style="background: transparent;">
+          <button type="submit" ion-button block round color="primary" [disabled]="!feedbackForm.valid">{{'feedback_send'|translate}}</button>
+        </ion-item>
+      </form>
+    </ion-list>
+    <ion-row justify-content-center>
+      <ion-col col-12 text-center text-small>
+        <span style="color: #717171;">Copyright&copy;2018. Ing. Wilfredo Lorenzo Hernández.
+          <br/> All Rights Reserved.</span>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

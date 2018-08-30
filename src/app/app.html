@@ -1,18 +1,58 @@
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
+  <ion-header padding class="animate_bg">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4>
+          <div style="background: #f1f5f7;border-radius: 4px;">
+            <img src="assets/imgs/churchlogo.png">
+          </div>
+        </ion-col>
+        <ion-col col-8>
+          <ion-row>
+            <ion-col col-12 align-items-center text-center no-padding style="margin-bottom:8px;">
+              <span style="font-size: 1.4rem; color: white; text-shadow: 1px 1px 0 rgba(0,0,0,.5);">{{'title'|translate}}</span>
+            </ion-col>
+            <ion-col col-12>
+              <ion-row>
+                <ion-col col-12 no-padding class="space-bar">
+                  <div class="space-used" [ngStyle]="{'width':diskSpacePorcent+'%'}"></div>
+                </ion-col>
+                <ion-col col-12 no-padding>
+                  <ion-row justify-content-around>
+                    <ion-col text-left no-padding style="font-size: 1.2rem;">
+                      {{ appSize | fileSize }}
+                    </ion-col>
+                    <ion-col text-right no-padding style="font-size: 1.2rem;">
+                      {{ diskFreeSpace | fileSize }}
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+              </ion-row>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-header>
 
-  <ion-content>
+  <ion-content no-padding class="default_bg">
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
+      <button menuClose ion-item clear *ngFor="let p of pages" (click)="openPage(p)">
+        <ion-icon [name]="p.icon" item-start></ion-icon>
+        <span>{{p.title | translate}}</span>
       </button>
+      <ion-item text-center style="background: transparent;">
+        <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+          <input type="hidden" name="cmd" value="_s-xclick">
+          <input type="hidden" name="hosted_button_id" value="3YXD3K4XRPVYE">
+          <button type="submit">
+            <input type="image" src="assets/imgs/paypal/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="assets/imgs/paypal/pixel.gif" width="1" height="1">
+          </button>
+        </form>
+      </ion-item>
     </ion-list>
   </ion-content>
-
 </ion-menu>
 
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->

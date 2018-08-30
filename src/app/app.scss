@@ -14,3 +14,87 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+
+.animate_bg {
+	color: #fff;
+	background: #36434c;
+	box-shadow: none;
+    background:  #3c4a54;
+    border-bottom: 1px solid #37444d;
+
+	// background: linear-gradient(-45deg, #F48AD4,#F2A790, #F3E28A, #BEFEA5, #A19AF7,#D062FF);
+	// background-size: 400% 400%;
+	// -webkit-animation: Gradient 15s ease infinite;
+	// -moz-animation: Gradient 15s ease infinite;
+	// animation: Gradient 15s ease infinite;
+}
+.header-md::after{
+	background: none;
+}
+@-webkit-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@-moz-keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+
+@keyframes Gradient {
+	0% {
+		background-position: 0% 50%
+	}
+	50% {
+		background-position: 100% 50%
+	}
+	100% {
+		background-position: 0% 50%
+	}
+}
+ion-menu ion-content,ion-menu ion-content ion-list button{
+	background: #3c4a54!important;
+}
+ion-menu ion-content ion-list * {
+    border-color: #36434c!important;
+}
+ion-menu ion-content ion-list span {
+    // color: color($colors,dark_primary);
+	color: #fff;
+}
+ion-menu ion-content ion-list ion-icon {
+    // color: color($colors,dark_primary);
+	color: #818c94;
+}
+.space-bar{
+	height: 6px;
+	background: #313c44;
+	border-radius: 12px;
+	margin-bottom:  6px;
+	border: 1px #37434c solid;
+}
+.space-used{
+	height: 5px;
+	width: 0%;
+	background: #42bd41;
+	border-radius: 10px;
+}
+body, ion-content:not(.default_bg){
+    background: #f1f5f7;
+    background-size: 100% 100%;
+}

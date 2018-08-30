@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{selectedItem.id}} - {{selectedItem.title}}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card #content>
+    <ion-card-content>
+      <p #text [style.text-align]="'center'" [ngStyle]="{'font-size': fontSize+'vw'}" [innerHTML]="selectedItem.lyrics"></p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-row justify-content-center>
+      <ion-col align-self-center col-12 padding-horizontal>
+        <ion-range [(ngModel)]="currentPosition" min="0" max="100" (ionBlur)="seekMusic($event)"></ion-range>
+      </ion-col>
+      <ion-col align-self-center col-4>
+        <button ion-button icon-left clear block (click)="playMusic()" *ngIf="(mediaStatus) !==2">
+          <ion-icon name="play"></ion-icon>
+          Play
+        </button>
+        <button ion-button icon-left clear block (click)="pauseMusic()" *ngIf="(mediaStatus) ===2">
+          <ion-icon name="pause"></ion-icon>
+          Pause
+        </button>
+      </ion-col>
+      <ion-col align-self-center col-4 text-center>
+        <span style="color: #20b11d;">{{currentPositionTime}}/{{mediaDurationTime}}</span>
+      </ion-col>
+      <ion-col col-4>
+        <button ion-button icon-left clear block (click)="stopMusic()">
+          <ion-icon name="square"></ion-icon>
+          Stop
+        </button>
+      </ion-col>
+      <ion-col align-self-center col-12 *ngIf="canDownload">
+        <button ion-button icon-left clear block (click)="downloadMusic()">
+          <ion-icon name="cloud-download" item-start></ion-icon>
+          Download
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+  <ion-list>
+    <ion-item text-wrap *ngIf="selectedItem.based_on" class="popover-text-smaller" [style.background]="'transparent'">{{'based' | translate}}: {{selectedItem.based_on}}</ion-item>
+    <ion-item text-wrap *ngIf="selectedItem.author" class="popover-text-smaller" [style.background]="'transparent'">{{'author' | translate}}: {{selectedItem.author}}</ion-item>
+  </ion-list>
+</ion-content>

@@ -1,22 +1,6 @@
-<ion-header>
-  <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>List</ion-title>
-  </ion-navbar>
-</ion-header>
-
-<ion-content>
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <ion-list>
-    <button ion-item *ngFor="let item of items;let i = index" (click)="itemTapped($event, item)">
-      <!-- <ion-icon [name]="item.icon" item-start></ion-icon> -->
-      {{item.number}} - {{item.title}}
-    </button>
-  </ion-list>
-  <div *ngIf="selectedItem" padding>
-    You navigated here from
-    <b>{{selectedItem.title}}</b>
-  </div>
-</ion-content>
+<ion-tabs tabsPlacement="bottom">
+  <ion-tab (ionSelect)="activeTab('all')" tabsHideOnSubPages="true" color="primary" tabIcon="musical-notes" tabTitle="{{'allhymns'|translate}}"
+    [root]="tabAll"></ion-tab>
+  <ion-tab (ionSelect)="activeTab('favs')" tabsHideOnSubPages="true" color="primary" tabIcon="heart" tabTitle="{{'favorites'|translate}}"
+    [root]="tabFavs"></ion-tab>
+</ion-tabs>

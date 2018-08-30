@@ -1,0 +1,24 @@
+<ion-list>
+    <ion-row>
+        <ion-col no-padding>
+            <button tappable (click)="restFontSize()" ion-item detail-none class="popover-text-button popover-text-smaller">A</button>
+        </ion-col>
+        <ion-col no-padding>
+            <button tappable (click)="sumFontSize()" ion-item detail-none class="popover-text-button popover-text-larger">A</button>
+        </ion-col>
+    </ion-row>
+    <ion-row class="popover-row-dots">
+        <ion-col>
+            <button tappable (click)="changeBackground('white')" ion-button="popover-dot" class="popover-dot-white" [class.selected]="theme === 'white'"></button>
+        </ion-col>
+        <ion-col>
+            <button tappable (click)="changeBackground('tan')" ion-button="popover-dot" class="popover-dot-tan" [class.selected]="theme === 'tan'"></button>
+        </ion-col>
+        <ion-col>
+            <button tappable (click)="changeBackground('grey')" ion-button="popover-dot" class="popover-dot-grey" [class.selected]="theme === 'grey'"></button>
+        </ion-col>
+        <ion-col>
+            <button tappable (click)="changeBackground('black')" ion-button="popover-dot" class="popover-dot-black" [class.selected]="theme === 'black'"></button>
+        </ion-col>
+    </ion-row>
+</ion-list>

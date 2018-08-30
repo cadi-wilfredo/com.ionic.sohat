@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <!-- <ion-title></ion-title> -->
+    <ion-searchbar ([ngModel])="searchText" (ionInput)="filterHymns($event)" placeholder="{{ 'search' | translate }}"></ion-searchbar>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ng-template ngFor let-item [ngForOf]="items">  
+    <ion-grid no-padding>
+      <ion-row align-items-center>
+        <ion-col text-nowrap col-10 col-sm-11>
+          <button clear ion-item style="background: transparent;" (click)="itemTapped($event, item)">
+            {{item.id}} - {{item.title}}
+            <p><ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
+          </button>
+        </ion-col>
+        <ion-col col-2 col-sm-1>
+          <button ion-button icon-only clear (click)="confirmToggleFavorite(item)" block>
+            <ion-icon [name]="item.favorite ? 'heart' : 'heart-outline'" [color]="item.favorite? 'danger' : 'primary'"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" loadingSpinner="bubbles" threshold="10%">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

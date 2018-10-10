@@ -9,13 +9,14 @@
 </ion-header>
 
 <ion-content>
-  <ng-template ngFor let-item [ngForOf]="items">  
+  <ng-template ngFor let-item [ngForOf]="hymnsAll">
     <ion-grid no-padding>
       <ion-row align-items-center>
         <ion-col text-nowrap col-10 col-sm-11>
           <button clear ion-item style="background: transparent;" (click)="itemTapped($event, item)">
             {{item.id}} - {{item.title}}
-            <p><ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
+            <p>
+              <ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
           </button>
         </ion-col>
         <ion-col col-2 col-sm-1>

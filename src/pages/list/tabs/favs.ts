@@ -1,50 +1,71 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, ToastController, Events, AlertController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, LoadingController, Events, Content, ToastController, AlertController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { ItemDetailPage } from "../itemDetail/itemDetail";
 import { IhymnsSpanishOne, ShymnsSpanishOne } from "../../../services/hymnsSpanishOne";
 
 @Component({
-  templateUrl: './all.html'
+  templateUrl: './favs.html'
 })
 export class TabFavs {
+  @ViewChild(Content) content: Content;
   error: any;
-  hymnsSpanishOne: IhymnsSpanishOne[] = [];
-  items: IhymnsSpanishOne[] = [];
+  hymnsFavs: IhymnsSpanishOne[] = [];
+  searchText: string = "";
 
-  constructor(private navCtrl: NavController,
+  constructor(
+    public navCtrl: NavController,
     public navParams: NavParams,
     public shymnsSpanishOne: ShymnsSpanishOne,
+    public loadingCtrl: LoadingController,
     public toastCtrl: ToastController,
     public events: Events,
     public alertCtrl: AlertController,
     public translate: TranslateService
   ) {
-    events.subscribe('reloadFavsHymns', (data) => {
-      this.hymnsSpanishOne = data;
-      this.initializeItems();
+    events.subscribe('reloadFavsHymns', data => {
+      this.hymnsFavs = data;
     });
+    events.subscribe('toggleFavs', (item) => {
+      let index = this.hymnsFavs.findIndex((hymn: IhymnsSpanishOne, pos: number) => {
+        if (hymn.id === item.id) {
+          this.hymnsFavs.splice(pos, 1);
+          return true;
+        } return false;
+      })
+      if (index < 0) {
+        this.hymnsFavs.push(item);
+        this.hymnsFavs.sort((hymn1, hymn2) => { if (hymn1.id > hymn2.id) return hymn1.id; else hymn2.id; });
+      }
+    });
+    this.events.publish('filterFavsHymns', false, false);
   }
 
   itemTapped(event, item) {
-    // That's right, we're pushing to ourselves!
     this.navCtrl.push(ItemDetailPage, {
       item: item
     });
   }
 
-  initializeItems() {
-    this.items = this.hymnsSpanishOne;
+  filterHymns(ev: any) {
+    this.searchText = ev.target.value;
+    this.content.scrollToTop();
+    if (this.searchText && this.searchText.trim() !== "")
+      this.events.publish('filterFavsHymns', this.searchText, false);
+    else {
+      this.events.publish('filterFavsHymns', false, false);
+    }
   }
 
-  getItems(ev: any) {
-    this.initializeItems();
-    let val = ev.target.value;
-    if (val && val.trim() != '') {
-      this.items = this.hymnsSpanishOne.filter((item, index) => {
-        return (item.title.toLowerCase().indexOf(val.toLowerCase()) > -1) || item.id === parseInt(val);
-      })
+  doInfinite(infiniteScroll) {
+    if (this.searchText && this.searchText.trim() !== "")
+      this.events.publish('moreFavsHymns', this.searchText, true);
+    else {
+      this.events.publish('moreFavsHymns', false, true);
     }
+    this.events.subscribe('reloadFavsHymns', (data) => {
+      infiniteScroll.complete();
+    });
   }
 
   confirmToggleFavorite(item: IhymnsSpanishOne): void {
@@ -56,7 +77,7 @@ export class TabFavs {
           text: 'No',
           role: 'cancel'
         }, {
-          text: 'Yes', handler: data => {
+          text: 'Yes', handler: () => {
             this.toggleFavorite(item);
           }
         }]
@@ -67,18 +88,18 @@ export class TabFavs {
   }
 
   toggleFavorite(item: IhymnsSpanishOne): void {
-    let all = this.shymnsSpanishOne.toggleFavorite(item, this.translate.currentLang);
-    if (all instanceof Promise)
-      all.then((data) => {
-        this.initializeItems();
-        let toast = this.toastCtrl.create({
+    let favs = this.shymnsSpanishOne.toggleFavorite(item, this.translate.currentLang);
+    if (favs instanceof Promise)
+      favs.then(data => {
+        this.toastCtrl.create({
           message: (!item.favorite ? "It was removed from favorites..." : "It was added to favorites..."),
           duration: 1500
         }).present();
+        this.events.publish('toggleFavs', data);
       }).catch((error) => {
         this.error = error
       });
-    else this.error = all;
+    else this.error = favs;
   }
 
   removeBR(text: string) {

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { App, IonicPage, NavController, NavParams, LoadingController, Events } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { App, IonicPage, NavController, NavParams, LoadingController, Events, Tabs } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Storage } from '@ionic/storage';
 
@@ -17,11 +17,13 @@ import { IhymnsSpanishOne, ShymnsSpanishOne } from "../../services/hymnsSpanishO
   templateUrl: 'list.html'
 })
 export class ListPage {
+  @ViewChild('listTabs') listTabs: Tabs;
   error: any;
   tabAll: any;
   tabFavs: any;
   loader: any;
-  hymnsSpanishOne: IhymnsSpanishOne[] = [];
+  hymnsAll: IhymnsSpanishOne[] = [];
+  hymnsFavs: IhymnsSpanishOne[] = [];
 
   constructor(
     public app: App,
@@ -48,50 +50,49 @@ export class ListPage {
     }).catch(error => {
       this.translate.use('en');
     });
+
     events.subscribe('moreAllHymns', (searchText, scroll) => {
       this.getAllHymns(searchText, scroll);
     });
     events.subscribe('filterAllHymns', (searchText, scroll) => {
-      if (!searchText && !scroll)
-        this.hymnsSpanishOne = [];
+      if (!scroll)
+        this.hymnsAll = [];
       this.getAllHymns(searchText, scroll);
+    });
+
+    events.subscribe('moreFavsHymns', (searchText, scroll) => {
+      this.getFavsHymns(searchText, scroll);
+    });
+    events.subscribe('filterFavsHymns', (searchText, scroll) => {
+      if (!scroll)
+        this.hymnsFavs = [];
+      this.getFavsHymns(searchText, scroll);
     });
   }
 
-  activeTab(tab: string) {
+  getAllHymns(filterText?: string, scroll?: boolean) {
     this.loader = this.loadingCtrl.create();
     this.loader.present();
-    switch (tab) {
-      case "all":
-        // this.events.publish('reloadAllHymns', []);
-        this.getAllHymns();
-        break;
-      case "favs":
-        this.getFavsHymns();
-        this.events.publish('reloadFavsHymns', []);
-        break;
-    }
-  }
-
-  getAllHymns(filterText?: string, scroll?: boolean) {
-    let all = this.shymnsSpanishOne.getAll(this.translate.currentLang, false, this.hymnsSpanishOne.length, filterText);
+    let all = this.shymnsSpanishOne.getAll(this.translate.currentLang, false, this.hymnsAll.length, filterText);
     if (all instanceof Promise)
       all.then((data) => {
-        this.hymnsSpanishOne = (scroll ? this.hymnsSpanishOne.concat(data) : data);
+        this.hymnsAll = (scroll ? this.hymnsAll.concat(data) : data);
+        this.events.publish('reloadAllHymns', this.hymnsAll);
         this.loader.dismiss();
-        this.events.publish('reloadAllHymns', this.hymnsSpanishOne);
       }).catch((error) => { this.error = error });
     else this.error = all;
   }
 
-  getFavsHymns() {
-    let all = this.shymnsSpanishOne.getAll(this.translate.currentLang, true);
-    if (all instanceof Promise)
-      all.then((data) => {
-        this.hymnsSpanishOne = data;
+  getFavsHymns(filterText?: string, scroll?: boolean) {
+    this.loader = this.loadingCtrl.create();
+    this.loader.present();
+    let favs = this.shymnsSpanishOne.getAll(this.translate.currentLang, true, this.hymnsFavs.length, filterText);
+    if (favs instanceof Promise)
+      favs.then((data) => {
+        this.hymnsFavs = (scroll ? this.hymnsFavs.concat(data) : data);
+        this.events.publish('reloadFavsHymns', this.hymnsFavs);
         this.loader.dismiss();
-        this.events.publish('reloadFavsHymns', this.hymnsSpanishOne);
       }).catch((error) => { this.error = error });
-    else this.error = all;
+    else this.error = favs;
   }
 }

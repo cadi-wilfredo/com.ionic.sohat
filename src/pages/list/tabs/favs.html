@@ -4,18 +4,19 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <!-- <ion-title></ion-title> -->
-    <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'search' | translate }}"></ion-searchbar>
+    <ion-searchbar ([ngModel])="searchText" (ionInput)="filterHymns($event)" placeholder="{{ 'search' | translate }}"></ion-searchbar>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ng-template ngFor let-item [ngForOf]="items">
+  <ng-template ngFor let-item [ngForOf]="hymnsFavs">
     <ion-grid no-padding>
       <ion-row align-items-center>
         <ion-col text-nowrap col-10 col-sm-11>
           <button clear ion-item style="background: transparent;" (click)="itemTapped($event, item)">
             {{item.id}} - {{item.title}}
-            <p><ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
+            <p>
+              <ion-icon name="musical-note"></ion-icon> {{removeBR(item.lyrics)}}</p>
           </button>
         </ion-col>
         <ion-col col-2 col-sm-1>
@@ -26,4 +27,7 @@
       </ion-row>
     </ion-grid>
   </ng-template>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" loadingSpinner="bubbles" threshold="10%">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

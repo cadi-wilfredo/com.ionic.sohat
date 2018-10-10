@@ -10,8 +10,7 @@ import { IhymnsSpanishOne, ShymnsSpanishOne } from "../../../services/hymnsSpani
 export class TabAll {
   @ViewChild(Content) content: Content;
   error: any;
-  hymnsSpanishOne: IhymnsSpanishOne[] = [];
-  items: IhymnsSpanishOne[] = [];
+  hymnsAll: IhymnsSpanishOne[] = [];
   searchText: string = "";
 
   constructor(
@@ -25,9 +24,14 @@ export class TabAll {
     public translate: TranslateService
   ) {
     events.subscribe('reloadAllHymns', (data) => {
-      this.hymnsSpanishOne = data;
-      this.initializeItems();
+      this.hymnsAll = data;
     });
+    events.subscribe('toggleFavs', (item) => {
+      this.hymnsAll
+        .filter(hymn => hymn.id === item.id)
+        .map(hymn => { console.log('a', hymn.favorite); hymn.favorite = item.favorite });
+    });
+    this.events.publish('filterAllHymns', false, false);
   }
 
   itemTapped(event, item) {
@@ -36,21 +40,22 @@ export class TabAll {
     });
   }
 
-  initializeItems() {
-    this.items = this.hymnsSpanishOne;
-  }
-
   filterHymns(ev: any) {
     this.searchText = ev.target.value;
+    this.content.scrollToTop();
     if (this.searchText && this.searchText.trim() !== "")
-      this.events.publish('filterAllHymns', this.searchText.trim(), false);
+      this.events.publish('filterAllHymns', this.searchText, false);
     else {
       this.events.publish('filterAllHymns', false, false);
     }
   }
 
   doInfinite(infiniteScroll) {
-    this.events.publish('moreAllHymns', this.searchText.trim(), true);
+    if (this.searchText && this.searchText.trim() !== "")
+      this.events.publish('moreAllHymns', this.searchText, true);
+    else {
+      this.events.publish('moreAllHymns', false, true);
+    }
     this.events.subscribe('reloadAllHymns', (data) => {
       infiniteScroll.complete();
     });
@@ -65,7 +70,7 @@ export class TabAll {
           text: 'No',
           role: 'cancel'
         }, {
-          text: 'Yes', handler: data => {
+          text: 'Yes', handler: () => {
             this.toggleFavorite(item);
           }
         }]
@@ -78,12 +83,13 @@ export class TabAll {
   toggleFavorite(item: IhymnsSpanishOne): void {
     let all = this.shymnsSpanishOne.toggleFavorite(item, this.translate.currentLang);
     if (all instanceof Promise)
-      all.then((data) => {
-        this.initializeItems();
-        let toast = this.toastCtrl.create({
+      all.then(data => {
+        item = data;
+        this.toastCtrl.create({
           message: (!item.favorite ? "It was removed from favorites..." : "It was added to favorites..."),
           duration: 1500
         }).present();
+        this.events.publish('toggleFavs', data);
       }).catch((error) => {
         this.error = error
       });

@@ -28,7 +28,6 @@ export class ShymnsSpanishOne {
                 if (filter) {
                     sql = `SELECT * FROM ${this.tables[lang]}` + ` WHERE (LOWER(title) LIKE LOWER('%${filter}%') OR _id = '${filter}') ` + (fav ? ' AND favorite = 1 ' : '') + ` ORDER BY "_id" ASC LIMIT  ${cant},30`;
                 }
-                console.log(sql)
                 db.executeSql(sql, [])
                     .then((data) => {
                         let hymns: IhymnsSpanishOne[] = [];

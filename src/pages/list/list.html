@@ -1,6 +1,4 @@
-<ion-tabs tabsPlacement="bottom">
-  <ion-tab (ionSelect)="activeTab('all')" tabsHideOnSubPages="true" color="primary" tabIcon="musical-notes" tabTitle="{{'allhymns'|translate}}"
-    [root]="tabAll"></ion-tab>
-  <ion-tab (ionSelect)="activeTab('favs')" tabsHideOnSubPages="true" color="primary" tabIcon="heart" tabTitle="{{'favorites'|translate}}"
-    [root]="tabFavs"></ion-tab>
+<ion-tabs tabsPlacement="bottom" #listTabs>
+  <ion-tab tabsHideOnSubPages="true" color="primary" tabIcon="musical-notes" tabTitle="{{'allhymns'|translate}}" [root]="tabAll"></ion-tab>
+  <ion-tab tabsHideOnSubPages="true" color="primary" tabIcon="heart" tabTitle="{{'favorites'|translate}}" [root]="tabFavs"></ion-tab>
 </ion-tabs>
